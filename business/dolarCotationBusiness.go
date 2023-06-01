@@ -1,12 +1,13 @@
 package business
 
 import (
+	"github.com/Guilherme415/Client-Server-API/models/dto"
 	"github.com/Guilherme415/Client-Server-API/repository"
 	"github.com/Guilherme415/Client-Server-API/service"
 )
 
 type IDolarCotationBusiness interface {
-	DolarCotationMonitoring() error
+	DolarCotationMonitoring() (*dto.SaveDolarCotationInfosDTO, error)
 }
 
 type DolarCotationBusiness struct {
@@ -18,16 +19,20 @@ func NewDolarCotationBusiness(dolarCotationRepository repository.IDolarCotationR
 	return &DolarCotationBusiness{dolarCotationRepository, awesomeapi}
 }
 
-func (d *DolarCotationBusiness) DolarCotationMonitoring() error {
+func (d *DolarCotationBusiness) DolarCotationMonitoring() (*dto.SaveDolarCotationInfosDTO, error) {
 	dolarCotation, err := d.awesomeapi.GetDolarCotation()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = d.dolarCotationRepository.Create(*dolarCotation)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	response := dto.SaveDolarCotationInfosDTO{
+		VarBid: dolarCotation.USDBRL.Bid,
+	}
+
+	return &response, nil
 }

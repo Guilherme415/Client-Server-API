@@ -6,6 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 func ConnectDB() error {
 	db, err := gorm.Open(sqlite.Open("clientServerApi.db"), &gorm.Config{})
 	if err != nil {
@@ -13,6 +15,8 @@ func ConnectDB() error {
 	}
 
 	db.AutoMigrate(&models.DolarCotation{})
+
+	DB = db
 
 	return nil
 }

@@ -15,5 +15,7 @@ func NewServer() *gin.Engine {
 		panic(fmt.Errorf("can't connet DB, err: %s", err.Error()))
 	}
 
+	Router(r)
+
 	return r
 }
