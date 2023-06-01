@@ -1,26 +1,18 @@
 package db
 
 import (
-	"database/sql"
-	"time"
-
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/Guilherme415/Client-Server-API/models"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func ConnectDB() error {
-	db, err := sql.Open("sqlite3", "clientServerApi.db")
+	db, err := gorm.Open(sqlite.Open("clientServerApi.db"), &gorm.Config{})
 	if err != nil {
 		return err
 	}
 
-	// err = db.Ping()
-	// if err != nil {
-	// 	return err
-	// }
-
-	db.SetConnMaxLifetime(time.Minute * 3)
-	db.SetMaxOpenConns(10)
-	db.SetMaxIdleConns(10)
+	db.AutoMigrate(&models.DolarCotation{})
 
 	return nil
 }
